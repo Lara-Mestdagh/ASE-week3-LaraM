@@ -1,6 +1,6 @@
 namespace Ex1.Models;
 
-public abstract class Collectible
+public abstract class Collectible : IComparable<Collectible>
 {
     // PROPERTIES
     public string Name { get; set; }
@@ -9,6 +9,12 @@ public abstract class Collectible
     public double StartBidPrice => Price * 0.8; // Calculated property
     // Abstract property for CollectType
     public abstract string CollectType { get; }
+    public int CompareTo(Collectible? other)
+    {
+        if (other == null)
+            return 1;
+        return string.Compare(Name, other.Name, StringComparison.Ordinal);
+    }
 
     // CONSTRUCTORS
     public Collectible()

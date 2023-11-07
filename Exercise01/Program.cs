@@ -36,3 +36,33 @@ foreach (var comicBook in comicBooks)
 {
     Console.WriteLine(comicBook.ToString());
 }
+
+// Create a list of Collectible objects
+List<Collectible> collectibles = new List<Collectible>();
+
+// Add objects of each class to the list
+collectibles.Add(wine1);
+collectibles.Add(wine2);
+collectibles.Add(wine3);
+collectibles.Add(postStamp1);
+collectibles.Add(postStamp2);
+collectibles.Add(postStamp3);
+collectibles.Add(comicBook1);
+collectibles.Add(comicBook2);
+collectibles.Add(comicBook3);
+
+// Check the StartBidPrice and CollectType values for a few items in the list
+foreach (var collectible in collectibles)
+{
+    Console.WriteLine($"Name: {collectible.Name}, StartBidPrice: {collectible.StartBidPrice:C}, CollectType: {collectible.CollectType}");
+}
+
+// Sort the list of Collectible items
+collectibles.Sort();
+
+// Print the sorted list
+Console.WriteLine("\nSorted Collectibles:");
+foreach (var collectible in collectibles)
+{
+    Console.WriteLine($"Name: {collectible.Name}, CollectType: {collectible.CollectType}");
+}

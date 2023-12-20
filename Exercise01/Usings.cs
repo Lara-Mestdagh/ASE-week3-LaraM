@@ -1,1 +1,1 @@
-// global using Models;
+global using Ex1.Models;

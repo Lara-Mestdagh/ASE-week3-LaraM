@@ -1,13 +1,15 @@
-﻿using Ex2.Models;
+﻿// Provide the paths to your CSV files
+const string educationalCsvPath = "../Exercise02/Data/educational.csv";
+const string guestCsvPath = "../Exercise02/Data/guestperformance.csv";
+const string theatreCsvPath = "../Exercise02/Data/theatre.csv";
 
-// Replace "path/to/your/file.csv" with the actual path to your CSV file
-string filePath = "../Data/educational.csv";
+// Read all paths and put them into lists
+List<EducationalProduction>educationalProductions = ReadEducationalProductions(educationalCsvPath);
+List<GuestPerformance>guestPerformances = ReadGuestPerformances(guestCsvPath);
+List<TheatreProduction>theatreProductions = ReadTheatreProductions(theatreCsvPath);
 
-// Read productions from CSV
-List<Production> productions = ReadProductionsFromCsv(filePath);
-
-// Loop over the list
-foreach (var production in productions)
+// Loop over the list of educational productions
+foreach (var production in educationalProductions)
 {
     // Print each production-object
     Console.WriteLine($"Production Name: {production.Name}, Type: {production.Type}");
@@ -18,48 +20,132 @@ foreach (var production in productions)
     Console.WriteLine(); // Add a newline for clarity
 }
 
+// Loop over the list of guest performances
+foreach (var production in guestPerformances)
+{
+    // Print each production-object
+    Console.WriteLine($"Production Name: {production.Name}, Type: {production.GuestAssociation}");
 
+    // Place an order for each production
+    production.OrderNow();
 
-// static List<Production> ReadProductionsFromCsv(string filePath)
-// {
-//     var productions = new List<Production>();
+    Console.WriteLine(); // Add a newline for clarity
+}
 
-//     using (TextFieldParser parser = new TextFieldParser(filePath))
-//     {
-//         parser.TextFieldType = FieldType.Delimited;
-//         parser.SetDelimiters(";"); // Set your delimiter
+// Loop over the list of theatre productions
+foreach (var production in theatreProductions)
+{
+    // Print each production-object
+    Console.WriteLine($"Production Name: {production.Name}, Type: {production.Type}");
 
-//         while (!parser.EndOfData)
-//         {
-//             string[] fields = parser.ReadFields();
+    // Place an order for each production
+    production.OrderNow();
 
-//             // Assuming the CSV columns are in order: Name, Timestamp, Price, [Additional Properties]
-//             string name = fields[0];
-//             long timestamp = long.Parse(fields[1]);
-//             decimal price = decimal.Parse(fields[2]);
+    Console.WriteLine(); // Add a newline for clarity
+}
 
-//             // Determine the type and create the corresponding production
-//             Production production;
+// function to read the csv file and return a list of EducationalProduction objects
+List<EducationalProduction> ReadEducationalProductions(string path)
+{
+    List<EducationalProduction> productions = new List<EducationalProduction>();
+    string[] educationalText = File.ReadAllLines(path);
+    
+    // Skip the first line (headers) and start processing from the second line
+    for (int i = 1; i < educationalText.Length; i++)
+    {
+        string line = educationalText[i];
 
-//             if (/* Check condition for EducationalProduction */)
-//             {
-//                 string educationalMaterialUrl = fields[3];
-//                 production = new EducationalProduction(name, timestamp, price, educationalMaterialUrl);
-//             }
-//             else if (/* Check condition for GuestPerformance */)
-//             {
-//                 string guestAssociation = fields[3];
-//                 production = new GuestPerformance(name, timestamp, price, guestAssociation);
-//             }
-//             else
-//             {
-//                 string genre = fields[3];
-//                 production = new TheatreProduction(name, timestamp, price, genre);
-//             }
+        // Split the line into values using a semicolon as the delimiter
+        string[] values = line.Split(';'); // Use semicolon as the delimiter
 
-//             productions.Add(production);
-//         }
-//     }
+        // Check if there are at least 5 values (assuming 5 columns in the CSV)
+        if (values.Length >= 5)
+        {
+            // Create a new instance of EducationalProduction and add it to the list
+            var educationalProduction = new EducationalProduction(
+                values[0],
+                long.Parse(values[1]),
+                decimal.Parse(values[2].Replace(',', '.')), // Replace comma with dot for decimal values
+                values[3],
+                values[4]);
 
-//     return productions;
-// }
+            productions.Add(educationalProduction);
+        }
+        else
+        {
+            Console.WriteLine($"Skipping line with insufficient data: {line}");
+        }
+    }
+    return productions;
+}
+
+// function to read the csv file and return a list of GuestPerformance objects
+List<GuestPerformance> ReadGuestPerformances(string path)
+{
+    List<GuestPerformance> performances = new List<GuestPerformance>();
+    string[] guestText = File.ReadAllLines(path);
+    
+    // Skip the first line (headers) and start processing from the second line
+    for (int i = 1; i < guestText.Length; i++)
+    {
+        string line = guestText[i];
+
+        // Split the line into values using a semicolon as the delimiter
+        string[] values = line.Split(';'); // Use semicolon as the delimiter
+
+        // Check if there are at least 5 values (assuming 5 columns in the CSV)
+        if (values.Length >= 5)
+        {
+            // Create a new instance of GuestPerformance and add it to the list
+            var guestPerformance = new GuestPerformance(
+                values[0],
+                long.Parse(values[1]),
+                decimal.Parse(values[2].Replace(',', '.')), // Replace comma with dot for decimal values
+                values[3],
+                values[4]);
+
+            performances.Add(guestPerformance);
+        }
+        else
+        {
+            Console.WriteLine($"Skipping line with insufficient data: {line}");
+        }
+    }
+    return performances;
+}
+
+// function to read the csv file and return a list of TheatreProduction objects
+List<TheatreProduction> ReadTheatreProductions(string path)
+{
+    List<TheatreProduction> productions = new List<TheatreProduction>();
+    string[] theatreText = File.ReadAllLines(path);
+    
+    // Skip the first line (headers) and start processing from the second line
+    for (int i = 1; i < theatreText.Length; i++)
+    {
+        string line = theatreText[i];
+
+        // Split the line into values using a semicolon as the delimiter
+        string[] values = line.Split(';'); // Use semicolon as the delimiter
+
+        // Check if there are at least 5 values (assuming 5 columns in the CSV)
+        if (values.Length >= 5)
+        {
+            // Create a new instance of TheatreProduction and add it to the list
+            var theatreProduction = new TheatreProduction(
+                values[0],
+                long.Parse(values[1]),
+                decimal.Parse(values[2].Replace(',', '.')), // Replace comma with dot for decimal values
+                values[3],
+                values[4],
+                values[5]);
+
+            productions.Add(theatreProduction);
+        }
+        else
+        {
+            Console.WriteLine($"Skipping line with insufficient data: {line}");
+        }
+    }
+    return productions;
+}

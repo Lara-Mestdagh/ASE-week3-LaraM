@@ -1,6 +1,4 @@
-﻿using Ex1.Models;
-
-// Create objects of each class
+﻿// Create objects of each class
 Wine wine1 = new Wine("Red Wine", 2020, 50.0, 10.0, "France", Wine.WineType.RED);
 Wine wine2 = new Wine("White Wine", 2019, 45.0, 9.0, "Italy", Wine.WineType.WHITE);
 Wine wine3 = new Wine("Rosé Wine", 2021, 55.0, 11.0, "Spain", Wine.WineType.ROSE);

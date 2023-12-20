@@ -3,24 +3,30 @@ namespace Ex2.Models;
 public abstract class Production
 {
     // PROPERTIES
-    public abstract string Type { get; }
     public string Name { get; set; }
-    public decimal Price { get; set; }
-    public long _date;
-    public DateTime Date => DateTimeOffset.FromUnixTimeSeconds(_date).UtcDateTime;
+    protected long Date { get; set; }
+    public abstract string Type { get; }
+    protected decimal Price { get; set; }
+    protected string Description { get; set; }
 
     // CONSTRUCTORS
-    public Production(string name, long date, decimal price)
-        {
-            Name = name;
-            _date = date;
-            Price = price;
-        }
-
+    protected Production(string name, long date, decimal price, string description)
+    {
+        Name = name;
+        Date = date;
+        Price = price;
+        Description = description;
+    }
     // FUNCTIONS
     public virtual void OrderNow()
     {
+        // Make OrderNow virtual to allow overriding in derived classes
         Console.WriteLine($"Ticket ordered for production {Name} for the price of €{Price}.");
+    }
+    protected DateTime GetDateTimeFromTimestamp()
+    {
+        // This method converts the timestamp to a DateTime object
+        return DateTimeOffset.FromUnixTimeSeconds(Date).UtcDateTime;
     }
 }
 
@@ -31,8 +37,8 @@ public class EducationalProduction : Production
     public override string Type => "Educational";
 
     // CONSTRUCTORS
-    public EducationalProduction(string name, long date, decimal price, string educationalMaterialUrl)
-        : base(name, date, price)
+    public EducationalProduction(string name, long date, decimal price, string description, string educationalMaterialUrl)
+        : base(name, date, price, description)
     {
         EducationalMaterialUrl = educationalMaterialUrl;
     }
@@ -55,8 +61,8 @@ public class GuestPerformance : Production
     public override string Type => "Guest";
 
     // CONSTRUCTORS
-    public GuestPerformance(string name, long date, decimal price, string guestAssociation)
-        : base(name, date, price)
+    public GuestPerformance(string name, long date, decimal price, string description, string guestAssociation)
+        : base(name, date, price, description)
     {
         GuestAssociation = guestAssociation;
     }
@@ -72,13 +78,15 @@ public class GuestPerformance : Production
 public class TheatreProduction : Production
 {
     // PROPERTIES
+    public string Director { get; set; }
     public string Genre { get; set; }
     public override string Type => Genre;
 
     // CONSTRUCTORS
-    public TheatreProduction(string name, long date, decimal price, string genre)
-        : base(name, date, price)
+    public TheatreProduction(string name, long date, decimal price, string description, string director, string genre)
+        : base(name, date, price, description)
     {
         Genre = genre;
+        Director = director;
     }
 }
